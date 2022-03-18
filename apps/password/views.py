@@ -7,15 +7,16 @@ from django.views.generic import (
 	DeleteView
 )
 from django.urls import reverse_lazy
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PassWordForm
+from .mixins import EditAccess
 from password.models import passwordModel
 # Create your views here.
-class AllPassword(ListView):
+class AllPassword(LoginRequiredMixin,ListView):
 	template_name = "password/list_password.html"
 	def get_queryset(self):
 		return  passwordModel.objects.filter(owner=self.request.user)
-class CreatePassword(FormView):
+class CreatePassword(LoginRequiredMixin,FormView):
 	template_name = template_name = "password/add_password.html"
 	form_class = PassWordForm
 	def form_valid(self,form):
@@ -23,9 +24,9 @@ class CreatePassword(FormView):
 		owner_form.password = (__import__('base64').b64encode(owner_form.password.encode()))
 		owner_form.owner = self.request.user
 		owner_form.save()
-		return redirect('account:login')
+		return redirect('password:home')
 
-class PasswordDetail(DetailView):
+class PasswordDetail(LoginRequiredMixin,EditAccess,DetailView):
 	template_name = "password/detail_password.html"
 	def get_object(self):
 		pk = self.kwargs.get('pk')
@@ -38,7 +39,7 @@ class PasswordDetail(DetailView):
 		context['password'] = password_context.replace("b","")
 		return context
 
-class PasswordUpdate(UpdateView):
+class PasswordUpdate(LoginRequiredMixin,UpdateView,EditAccess):
 	template_name =  "password/update_password.html"
 	model =  passwordModel
 	form_class = PassWordForm
@@ -49,9 +50,9 @@ class PasswordUpdate(UpdateView):
 		owner_form.owner = self.request.user
 		owner_form.password = (__import__('base64').b64encode(owner_form.password.encode()))
 		owner_form.save()
-		return redirect('account:login')
+		return redirect('password:home')
 
-class PasswordDelete(DeleteView):
+class PasswordDelete(LoginRequiredMixin,EditAccess,DeleteView):
 	template_name = 'password/delete_password.html'
 	model = passwordModel
-	success_url = reverse_lazy('account:login')
+	success_url = reverse_lazy('password:home')
