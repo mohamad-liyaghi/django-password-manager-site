@@ -6,6 +6,8 @@ from django.views.generic import (
 	DetailView,
 	DeleteView
 )
+from django.urls import reverse_lazy
+
 from .forms import PassWordForm
 from password.models import passwordModel
 # Create your views here.
@@ -45,3 +47,8 @@ class PasswordUpdate(UpdateView):
 		owner_form.password = (__import__('base64').b64encode(owner_form.password.encode()))
 		owner_form.save()
 		return redirect('account:login')
+
+class PasswordDelete(DeleteView):
+	template_name = 'password/delete_password.html'
+	model = passwordModel
+	success_url = reverse_lazy('account:login')
