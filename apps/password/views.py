@@ -28,8 +28,20 @@ class PasswordDetail(DetailView):
 		global password_context
 		password_context = str((__import__('base64').b64decode(object.password.replace("b",""))))
 		return object
-
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['password'] = password_context.replace("b","")
 		return context
+
+class PasswordUpdate(UpdateView):
+	template_name =  "password/update_password.html"
+	model =  passwordModel
+	form_class = PassWordForm
+	def get_initial(self):
+		return {"password":""}
+	def form_valid(self,form):
+		owner_form = form.save(commit=False)
+		owner_form.owner = self.request.user
+		owner_form.password = (__import__('base64').b64encode(owner_form.password.encode()))
+		owner_form.save()
+		return redirect('account:login')
