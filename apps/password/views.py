@@ -11,7 +11,10 @@ from django.urls import reverse_lazy
 from .forms import PassWordForm
 from password.models import passwordModel
 # Create your views here.
-
+class AllPassword(ListView):
+	template_name = "password/list_password.html"
+	def get_queryset(self):
+		return  passwordModel.objects.filter(owner=self.request.user)
 class CreatePassword(FormView):
 	template_name = template_name = "password/add_password.html"
 	form_class = PassWordForm
