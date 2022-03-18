@@ -1,8 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.views.generic import (
 	ListView,
 	FormView,
 	UpdateView,
+	DetailView,
 	DeleteView
 )
 from .forms import PassWordForm
@@ -18,5 +19,17 @@ class CreatePassword(FormView):
 		owner_form.owner = self.request.user
 		owner_form.save()
 		return redirect('account:login')
-	def form_invalid(self, form):
-		print(form.errors)
+
+class PasswordDetail(DetailView):
+	template_name = "password/detail_password.html"
+	def get_object(self):
+		pk = self.kwargs.get('pk')
+		object = get_object_or_404(passwordModel,pk=pk)
+		global password_context
+		password_context = str((__import__('base64').b64decode(object.password.replace("b",""))))
+		return object
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['password'] = password_context.replace("b","")
+		return context
