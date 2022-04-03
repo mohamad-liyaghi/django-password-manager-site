@@ -38,7 +38,6 @@ class PasswordDetail(LoginRequiredMixin,EditAccess,DetailView):
 		context = super().get_context_data(**kwargs)
 		context['password'] = password_context.replace("b","")
 		return context
-
 class PasswordUpdate(LoginRequiredMixin,UpdateView,EditAccess):
 	template_name =  "password/update_password.html"
 	model =  passwordModel
@@ -51,7 +50,6 @@ class PasswordUpdate(LoginRequiredMixin,UpdateView,EditAccess):
 		owner_form.password = (__import__('base64').b64encode(owner_form.password.encode()))
 		owner_form.save()
 		return redirect('password:home')
-
 class PasswordDelete(LoginRequiredMixin,EditAccess,DeleteView):
 	template_name = 'password/delete_password.html'
 	model = passwordModel
