@@ -32,11 +32,11 @@ class PasswordDetail(LoginRequiredMixin,EditAccess,DetailView):
 		pk = self.kwargs.get('pk')
 		object = get_object_or_404(passwordModel,pk=pk)
 		global password_context
-		password_context = str((__import__('base64').b64decode(object.password.replace("b",""))))
+		password_context = str((__import__('base64').b64decode(object.password.replace("b"," "))))
 		return object
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['password'] = password_context.replace("b","")
+		context['password'] = password_context.replace("b","").replace("'","")
 		return context
 class PasswordUpdate(LoginRequiredMixin,UpdateView,EditAccess):
 	template_name =  "password/update_password.html"
