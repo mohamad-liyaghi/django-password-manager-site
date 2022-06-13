@@ -1,14 +1,13 @@
 from django.urls import  path
 from .views import (CreatePassword,
-                    PasswordDetail,
-                    PasswordUpdate,
-                    PasswordDelete,
-                    AllPassword)
-app_name = "password"
+                    PasswordDetail, PasswordUpdate,
+                    PasswordDelete, PasswordList)
+
+
 urlpatterns =[
-    path("",AllPassword.as_view(),name="home"),
+    path("", PasswordList.as_view(), name="home"),
     path('create/',CreatePassword.as_view(),name="add_password"),
-    path('detail/<int:pk>/',PasswordDetail.as_view(),name="detail"),
-    path('update/<int:pk>/',PasswordUpdate.as_view(),name="update"),
-    path('delete/<int:pk>/',PasswordDelete.as_view(),name="delete"),
+    path('detail/<str:token>/',PasswordDetail.as_view(),name="detail"),
+    path('update/<str:token>/',PasswordUpdate.as_view(),name="update"),
+    path('delete/<str:token>/',PasswordDelete.as_view(),name="delete"),
 ]

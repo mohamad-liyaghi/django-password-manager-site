@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import passwordModel
+from .models import Password
 # Register your models here.
-admin.site.register(passwordModel)
+admin.site.register(Password)
