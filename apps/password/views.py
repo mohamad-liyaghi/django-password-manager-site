@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 import uuid 
 
 from .forms import PassWordForm
+from .encryption import decode, encode
 from .mixins import EditAccess
 from password.models import Password
 
@@ -32,7 +33,7 @@ class CreatePassword(LoginRequiredMixin, FormView):
 
 	def form_valid(self,form):
 		form = form.save(commit=False)
-		form.password = (__import__('base64').b64encode(form.password.encode()))
+		form.password = encode(form.password)
 		form.token =  uuid.uuid4().hex.upper()[0:15]
 		form.owner = self.request.user
 		form.save()
@@ -48,12 +49,12 @@ class PasswordDetail(LoginRequiredMixin, EditAccess, DetailView):
 		token = self.kwargs.get('token')
 		object = get_object_or_404(Password, token= token)
 		global password_context
-		password_context = str((__import__('base64').b64decode(object.password.replace("b"," "))))
+		password_context = decode(object.password)
 		return object
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['password'] = password_context.replace("b","").replace("'","")
+		context['password'] = str(password_context).replace('b','').replace("'","")
 		return context
 
 
@@ -74,5 +75,6 @@ class PasswordUpdate(LoginRequiredMixin,UpdateView,EditAccess):
 
 class PasswordDelete(LoginRequiredMixin, EditAccess, DeleteView):
 	template_name = 'password/delete_password.html'
+	pk_url_kwarg = 'token'
 	model = Password
 	success_url = reverse_lazy('password:home')

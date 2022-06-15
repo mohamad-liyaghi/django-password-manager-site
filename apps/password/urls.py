@@ -3,6 +3,7 @@ from .views import (CreatePassword,
                     PasswordDetail, PasswordUpdate,
                     PasswordDelete, PasswordList)
 
+app_name = "password"
 
 urlpatterns =[
     path("", PasswordList.as_view(), name="home"),
