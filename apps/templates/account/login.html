@@ -4,12 +4,13 @@
 {% block title %}Login{% endblock title %}
 
 {% block body %}
-<h2>Login</h2>
-
-<form method="post">
-  {% csrf_token %}
-  {{ form.login | as_crispy_field }} <br>
-  {{ form.password | as_crispy_field }} <br>
-  <button class="btn btn-success" type="submit">Login</button>
-</form>
+<div class="shadow p-4 mb-5 bg-body rounded">
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.login | as_crispy_field }} <br>
+    {{ form.password | as_crispy_field }} <br>
+    <button class="btn btn-success" type="submit">Login</button>
+  </form>
+</div>
 {% endblock body %}

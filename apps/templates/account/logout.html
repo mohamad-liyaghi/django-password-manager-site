@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout</title>
+</head>
+<body>
+{% block body %}
+	<div class="shadow p-4 mb-5 bg-body rounded">
+	<h1>Logout</h1>
+<br/>
+        <h5>Are you sure you want to logout?</h5>
+		<form method=POST>
+			{% csrf_token %}
+			{{ form.as_p}}
+			<br/>
+			<input type="submit" value="Logout" class="btn btn-success">
+		</form>
+</div>
+<br/><br/>
+{% endblock %}
+</body>
+</html>
