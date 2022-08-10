@@ -1,4 +1,6 @@
 {% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,11 +19,14 @@
 	<div class="shadow p-4 mb-5 bg-body rounded">
 	<h1>Register</h1>
 <br/>
-		<form action="{% url 'account:register' %}" method=POST>
+		<form method=POST>
 			{% csrf_token %}
-			{{ form.as_p }}
-			<br/><br/>
-			<input type="submit" value="Submit" class="btn btn-secondary">
+			{{ form.nick_name | as_crispy_field }} <br>
+			{{ form.email | as_crispy_field }} <br>
+			{{ form.password | as_crispy_field }} <br>
+
+			<br/>
+			<input type="submit" value="Submit" class="btn btn-success">
 		</form>
 </div>
 <br/><br/>
