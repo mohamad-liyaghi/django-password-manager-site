@@ -17,8 +17,8 @@ import sys
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 LOGIN_REDIRECT_URL = "password:home"
-LOGIN_URL = "account:login"
-LOGOUT_REDIRECT_URL = "account:login"
+LOGIN_URL = "accounts:login"
+LOGOUT_REDIRECT_URL = "accounts:login"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-    'apps.account.apps.AccountConfig',
+
+    'apps.accounts.apps.AccountsConfig',
     'apps.password.apps.PasswordConfig'
 ]
 

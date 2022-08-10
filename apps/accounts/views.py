@@ -6,13 +6,13 @@ from .forms import  RegisterForm
 from django.contrib.auth import logout
 # Create your views here.
 class Login_user(LoginView):
-    template_name = "account/login.html"
+    template_name = "accounts/login.html"
     def get_success_url(self):
         return reverse_lazy('password:home')
 
 class Register_user(CreateView):
     form_class = RegisterForm
-    template_name = 'account/register.html'
+    template_name = 'accounts/register.html'
     def form_valid(self, form):
         form.save()
         return  redirect('password:home')
