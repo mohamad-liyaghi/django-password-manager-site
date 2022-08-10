@@ -4,11 +4,6 @@ from django.views.generic import  CreateView
 from django.urls import reverse_lazy
 from .forms import  RegisterForm
 from django.contrib.auth import logout
-# Create your views here.
-class Login_user(LoginView):
-    template_name = "accounts/login.html"
-    def get_success_url(self):
-        return reverse_lazy('password:home')
 
 class Register_user(CreateView):
     form_class = RegisterForm

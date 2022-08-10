@@ -13,12 +13,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 import os
 import sys
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
-LOGIN_REDIRECT_URL = "password:home"
-LOGIN_URL = "accounts:login"
-LOGOUT_REDIRECT_URL = "accounts:login"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -41,8 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    # third party
+    'allauth',
+    'allauth.account',
     'crispy_forms',
-
+    # local
     'apps.accounts.apps.AccountsConfig',
     'apps.password.apps.PasswordConfig'
 ]
@@ -132,3 +135,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL = "accounts.User"
+SITE_ID = 1
+
+AUTHENTICATION_BACKEND = {
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+}
+
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_FORMS = {"signup" : "apps.accounts.forms.RegisterForm"}
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 3
+
+
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+LOGIN_REDIRECT_URL = "password:home"
+LOGIN_URL = "account_login"
+LOGOUT_REDIRECT_URL = "account_login"
