@@ -47,7 +47,8 @@ class PasswordDetail(LoginRequiredMixin, EditAccess, DetailView):
 
 	def get_object(self):
 		token = self.kwargs.get('token')
-		object = get_object_or_404(Password, token= token)
+		id = self.kwargs.get("id")
+		object = get_object_or_404(Password, id= id, token= token)
 		global password_context
 		password_context = decode(object.password)
 		return object
@@ -67,6 +68,9 @@ class PasswordUpdate(LoginRequiredMixin,UpdateView,EditAccess):
 	def get_initial(self):
 		return {"password":""}
 
+	def get_object(self):
+		return get_object_or_404(Password, id= self.kwargs["id"], token= self.kwargs["token"])
+
 	def form_valid(self,form):
 		owner_form = form.save(commit=False)
 		owner_form.password = (__import__('base64').b64encode(owner_form.password.encode()))
@@ -78,3 +82,6 @@ class PasswordDelete(LoginRequiredMixin, EditAccess, DeleteView):
 	pk_url_kwarg = 'token'
 	model = Password
 	success_url = reverse_lazy('password:home')
+
+	def get_object(self):
+		return get_object_or_404(Password, id= self.kwargs["id"], token= self.kwargs["token"])
