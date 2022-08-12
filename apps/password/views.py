@@ -23,7 +23,7 @@ class PasswordList(LoginRequiredMixin,ListView):
 	template_name = "password/list_password.html"
 	def get_queryset(self):
 		return  Password.objects.filter(owner=self.request.user)
-		
+
 class CreatePassword(LoginRequiredMixin, FormView):
 	'''
 		Save a password and encode it to base64
@@ -55,7 +55,7 @@ class PasswordDetail(LoginRequiredMixin, EditAccess, DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['password'] = str(password_context).replace('b','').replace("'","")
+		context['password'] = password_context.decode("utf-8")
 		return context
 
 
